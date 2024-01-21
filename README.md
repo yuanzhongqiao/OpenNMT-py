@@ -1,167 +1,169 @@
-# OpenNMT-py: Open-Source Neural Machine Translation and (Large) Language Models
-
-[![Build Status](https://github.com/OpenNMT/OpenNMT-py/workflows/Lint%20&%20Tests/badge.svg)](https://github.com/OpenNMT/OpenNMT-py/actions)
-[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://opennmt.net/OpenNMT-py/)
-[![Gitter](https://badges.gitter.im/OpenNMT/OpenNMT-py.svg)](https://gitter.im/OpenNMT/OpenNMT-py?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Forum](https://img.shields.io/discourse/status?server=https%3A%2F%2Fforum.opennmt.net%2F)](https://forum.opennmt.net/)
-
-OpenNMT-py is the [PyTorch](https://github.com/pytorch/pytorch) version of the [OpenNMT](https://opennmt.net) project, an open-source (MIT) neural machine translation (and beyond!) framework. It is designed to be research friendly to try out new ideas in translation, language modeling, summarization, and many other NLP tasks. Some companies have proven the code to be production ready.
-
-We love contributions! Please look at issues marked with the [contributions welcome](https://github.com/OpenNMT/OpenNMT-py/issues?q=is%3Aissue+is%3Aopen+label%3A%22contributions+welcome%22) tag.
-
-Before raising an issue, make sure you read the requirements and the [Full Documentation](https://opennmt.net/OpenNMT-py/) examples.
-
-Unless there is a bug, please use the [Forum](https://forum.opennmt.net) or [Gitter](https://gitter.im/OpenNMT/OpenNMT-py) to ask questions.
-
-----
-## For beginners:
-
-There is a step-by-step and explained tuto (Thanks to Yasmin Moslem): [Tutorial](https://github.com/ymoslem/OpenNMT-Tutorial)
-
-Please try to read and/or follow before raising newbies issues.
-
-Otherwise you can just have a look at the [Quickstart](https://opennmt.net/OpenNMT-py/quickstart.html) steps
-
-----
-## New:
-
-* You will need Pytorch v2 preferably v2.1 which fixes some `scaled_dot_product_attention` issues
-* LLM support with converters for: Llama (+ Mistral), OpenLlama, Redpajama, MPT-7B, Falcon.
-* Support for 8bit and 4bit quantization along with LoRA adapters, with or without checkpointing.
-* You can finetune 7B and 13B models on a single RTX 24GB with 4-bit quantization.
-* Inference can be forced in 4/8bit using the same layer quantization as in finetuning.
-* Tensor parallelism when the model does not fit on one GPU's memory (both training and inference)
-* Once your model is finetuned you can run inference either with OpenNMT-py or faster with CTranslate2.
-* MMLU evaluation script, see results [here](https://github.com/OpenNMT/OpenNMT-py/blob/master/eval_llm/MMLU/readme.md)
-
-For all usecases including NMT, you can now use Multiquery instead of Multihead attention (faster at training and inference) and remove biases from all Linear (QKV as well as FeedForward modules).
-
-
-If you used previous versions of OpenNMT-py, you can check the [Changelog](https://github.com/OpenNMT/OpenNMT-py/blob/master/CHANGELOG.md) or the [Breaking Changes](https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/changes.md)
-
-----
-
-## Tutorials:
-
-* How to replicate Vicuna with a 7B or 13B llama (or Open llama, MPT-7B, Redpajama)  Language Model: [Tuto Vicuna](https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/examples/replicate_vicuna/ReplicateVicuna.md)
-* How to finetune NLLB-200 with your dataset: [Tuto Finetune NLLB-200](https://forum.opennmt.net/t/finetuning-and-curating-nllb-200-with-opennmt-py/5238)
-* How to create a simple OpenNMT-py REST Server: [Tuto REST](https://forum.opennmt.net/t/simple-opennmt-py-rest-server/1392)
-* How to create a simple Web Interface: [Tuto Streamlit](https://forum.opennmt.net/t/simple-web-interface/4527)
-* Replicate the WMT17 en-de experiment: [WMT17 ENDE](https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/examples/wmt17/Translation.md)
-
-----
-
-## Setup
-
-### Using docker
-
-To facilitate setup and reproducibility, some docker images are made available via the Github Container Registry:
-https://github.com/OpenNMT/OpenNMT-py/pkgs/container/opennmt-py
-
-You can adapt the workflow and build your own image(s) depending on specific needs by using `build.sh` and `Dockerfile` in the `docker` directory of the repo.
-
-```
-docker pull ghcr.io/opennmt/opennmt-py:3.4.3-ubuntu22.04-cuda12.1
-```
-
-Example oneliner to run a container and open a bash shell within it
-```
-docker run --rm -it --runtime=nvidia ghcr.io/opennmt/opennmt-py:test-ubuntu22.04-cuda12.1
-```
-Note: you need to have the [Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (formerly nvidia-docker) installed to properly take advantage of the CUDA/GPU features.
-
-Depending on your needs you can add various flags:
-- `-p 5000:5000` to forward some exposed port from your container to your host;
-- `-v /some/local/directory:/some/container/directory` to mount some local directory to some container directory;
-- `--entrypoint some_command` to directly run some specific command as the container entry point (instead of the default bash shell);
-
-### Installing locally
-
-OpenNMT-py requires:
-
-- Python >= 3.8
-- PyTorch >= 2.0 <2.2
-
-Install `OpenNMT-py` from `pip`:
-```bash
-pip install OpenNMT-py
-```
-
-or from the source:
-```bash
-git clone https://github.com/OpenNMT/OpenNMT-py.git
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><h1 tabindex="-1" dir="auto"><a id="user-content-opennmt-py-open-source-neural-machine-translation-and-large-language-models" class="anchor" aria-hidden="true" tabindex="-1" href="#opennmt-py-open-source-neural-machine-translation-and-large-language-models"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py：开源神经机器翻译和（大型）语言模型</font></font></h1>
+<p dir="auto"><a href="https://github.com/OpenNMT/OpenNMT-py/actions"><img src="https://github.com/OpenNMT/OpenNMT-py/workflows/Lint%20&amp;%20Tests/badge.svg" alt="构建状态" style="max-width: 100%;"></a>
+<a href="https://opennmt.net/OpenNMT-py/" rel="nofollow"><img src="https://camo.githubusercontent.com/bffc6e1208bae5741460f92c0c744b1831e930cf143e6f65f55b3a5e44d27688/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d6c61746573742d626c75652e737667" alt="文档" data-canonical-src="https://img.shields.io/badge/docs-latest-blue.svg" style="max-width: 100%;"></a>
+<a href="https://gitter.im/OpenNMT/OpenNMT-py?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge" rel="nofollow"><img src="https://camo.githubusercontent.com/4a5d7adebd0479ac23778300523b65502a8c92d87e734d1b3aae12e24e32dca9/68747470733a2f2f6261646765732e6769747465722e696d2f4f70656e4e4d542f4f70656e4e4d542d70792e737667" alt="吉特" data-canonical-src="https://badges.gitter.im/OpenNMT/OpenNMT-py.svg" style="max-width: 100%;"></a>
+<a href="https://forum.opennmt.net/" rel="nofollow"><img src="https://camo.githubusercontent.com/da04d20382245c08386a1da6fd2d52c0e136cab8711a1ff3a28af66d0333e46c/68747470733a2f2f696d672e736869656c64732e696f2f646973636f757273652f7374617475733f7365727665723d6874747073253341253246253246666f72756d2e6f70656e6e6d742e6e6574253246" alt="论坛" data-canonical-src="https://img.shields.io/discourse/status?server=https%3A%2F%2Fforum.opennmt.net%2F" style="max-width: 100%;"></a></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py 是</font><a href="https://opennmt.net" rel="nofollow"><font style="vertical-align: inherit;">OpenNMT</font></a><font style="vertical-align: inherit;">项目的</font></font><a href="https://github.com/pytorch/pytorch"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PyTorch</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本，OpenNMT 项目是一个开源 (MIT) 神经机器翻译（及其他！）框架。</font><font style="vertical-align: inherit;">它旨在方便研究，以尝试翻译、语言建模、摘要和许多其他 NLP 任务中的新想法。</font><font style="vertical-align: inherit;">一些公司已经证明代码可以投入生产。</font></font><a href="https://opennmt.net" rel="nofollow"><font style="vertical-align: inherit;"></font></a><font style="vertical-align: inherit;"></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们热爱贡献！</font><font style="vertical-align: inherit;">请查看标有</font></font><a href="https://github.com/OpenNMT/OpenNMT-py/issues?q=is%3Aissue+is%3Aopen+label%3A%22contributions+welcome%22"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">欢迎贡献</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">标签的问题。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在提出问题之前，请确保您阅读了要求和</font></font><a href="https://opennmt.net/OpenNMT-py/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">完整文档</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">示例。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">除非出现错误，否则请使用</font></font><a href="https://forum.opennmt.net" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">论坛</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或</font></font><a href="https://gitter.im/OpenNMT/OpenNMT-py" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Gitter</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">提问。</font></font></p>
+<hr>
+<h2 tabindex="-1" dir="auto"><a id="user-content-for-beginners" class="anchor" aria-hidden="true" tabindex="-1" href="#for-beginners"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于初学者：</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有一个分步解释的教程（感谢 Yasmin Moslem）：</font></font><a href="https://github.com/ymoslem/OpenNMT-Tutorial"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">教程</font></font></a></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在提出新手问题之前，请尝试阅读和/或关注。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">否则，您可以查看</font></font><a href="https://opennmt.net/OpenNMT-py/quickstart.html" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">快速入门</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">步骤</font></font></p>
+<hr>
+<h2 tabindex="-1" dir="auto"><a id="user-content-new" class="anchor" aria-hidden="true" tabindex="-1" href="#new"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">新的：</font></font></h2>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您将需要 Pytorch v2 最好是 v2.1，它修复了一些</font></font><code>scaled_dot_product_attention</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">问题</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LLM 支持以下转换器：Llama (+ Mistral)、OpenLlama、Redpajama、MPT-7B、Falcon。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持 8 位和 4 位量化以及 LoRA 适配器，带或不带检查点。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以在具有 4 位量化的单个 RTX 24GB 上微调 7B 和 13B 模型。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可以使用与微调相同的层量化以 4/8 位强制进行推理。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当模型不适合一个 GPU 内存时的张量并行性（训练和推理）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">模型经过微调后，您可以使用 OpenNMT-py 运行推理，或者使用 CTranslate2 运行推理速度更快。</font></font></li>
+<li><font style="vertical-align: inherit;"><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/eval_llm/MMLU/readme.md"><font style="vertical-align: inherit;">MMLU 评估脚本，请在此处</font></a><font style="vertical-align: inherit;">查看结果</font></font><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/eval_llm/MMLU/readme.md"><font style="vertical-align: inherit;"></font></a></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于包括 NMT 在内的所有用例，您现在可以使用 Multiquery 而不是 Multihead Attention（训练和推理速度更快），并消除所有 Linear（QKV 以及 FeedForward 模块）中的偏差。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您使用过 OpenNMT-py 的早期版本，您可以查看 Changelog</font></font><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/CHANGELOG.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Breaking </font></font><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/changes.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Changes</font></font></a></p>
+<hr>
+<h2 tabindex="-1" dir="auto"><a id="user-content-tutorials" class="anchor" aria-hidden="true" tabindex="-1" href="#tutorials"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">教程：</font></font></h2>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如何使用 7B 或 13B llama（或 Open llama、MPT-7B、Redpajama）复制 Vicuna 语言模型：</font></font><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/examples/replicate_vicuna/ReplicateVicuna.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuto Vicuna</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如何使用您的数据集微调 NLLB-200：</font></font><a href="https://forum.opennmt.net/t/finetuning-and-curating-nllb-200-with-opennmt-py/5238" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuto Finetune NLLB-200</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如何创建一个简单的 OpenNMT-py REST 服务器：</font></font><a href="https://forum.opennmt.net/t/simple-opennmt-py-rest-server/1392" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuto REST</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如何创建简单的 Web 界面：</font></font><a href="https://forum.opennmt.net/t/simple-web-interface/4527" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tuto Streamlit</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">复制 WMT17 en-de 实验：</font></font><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/examples/wmt17/Translation.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">WMT17 ENDE</font></font></a></li>
+</ul>
+<hr>
+<h2 tabindex="-1" dir="auto"><a id="user-content-setup" class="anchor" aria-hidden="true" tabindex="-1" href="#setup"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设置</font></font></h2>
+<h3 tabindex="-1" dir="auto"><a id="user-content-using-docker" class="anchor" aria-hidden="true" tabindex="-1" href="#using-docker"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用码头工人</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为了方便设置和可重复性，一些 docker 镜像通过 Github 容器注册表提供：
+ </font></font><a href="https://github.com/OpenNMT/OpenNMT-py/pkgs/container/opennmt-py"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://github.com/OpenNMT/OpenNMT-py/pkgs/container/opennmt-py</font></font></a></p>
+<p dir="auto"><font style="vertical-align: inherit;"></font><code>build.sh</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以使用和</font></font><code>Dockerfile</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在</font></font><code>docker</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">存储库目录中</font><font style="vertical-align: inherit;">根据特定需求调整工作流程并构建您自己的映像。</font></font></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>docker pull ghcr.io/opennmt/opennmt-py:3.4.3-ubuntu22.04-cuda12.1
+</code></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="docker pull ghcr.io/opennmt/opennmt-py:3.4.3-ubuntu22.04-cuda12.1" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于运行容器并在其中打开 bash shell 的示例 oneliner</font></font></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>docker run --rm -it --runtime=nvidia ghcr.io/opennmt/opennmt-py:test-ubuntu22.04-cuda12.1
+</code></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="docker run --rm -it --runtime=nvidia ghcr.io/opennmt/opennmt-py:test-ubuntu22.04-cuda12.1" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：您需要安装</font></font><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nvidia Container Toolkit</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（以前称为 nvidia-docker）才能正确利用 CUDA/GPU 功能。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">根据您的需要，您可以添加各种标志：</font></font></p>
+<ul dir="auto">
+<li><code>-p 5000:5000</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将一些暴露的端口从容器转发到主机；</font></font></li>
+<li><code>-v /some/local/directory:/some/container/directory</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将某个本地目录挂载到某个容器目录；</font></font></li>
+<li><code>--entrypoint some_command</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">直接运行某些特定命令作为容器入口点（而不是默认的 bash shell）；</font></font></li>
+</ul>
+<h3 tabindex="-1" dir="auto"><a id="user-content-installing-locally" class="anchor" aria-hidden="true" tabindex="-1" href="#installing-locally"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本地安装</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py 需要：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Python &gt;= 3.8</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PyTorch &gt;= 2.0 &lt;2.2</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"></font><code>OpenNMT-py</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从以下位置</font><font style="vertical-align: inherit;">安装</font></font><code>pip</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip install OpenNMT-py</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip install OpenNMT-py" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或来自来源：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>git clone https://github.com/OpenNMT/OpenNMT-py.git
+<span class="pl-c1">cd</span> OpenNMT-py
+pip install -e <span class="pl-c1">.</span></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="git clone https://github.com/OpenNMT/OpenNMT-py.git
 cd OpenNMT-py
-pip install -e .
-```
-
-Note: if you encounter a `MemoryError` during installation, try to use `pip` with `--no-cache-dir`.
-
-*(Optional)* Some advanced features (e.g. working pretrained models or specific transforms) require extra packages, you can install them with:
-
-```bash
-pip install -r requirements.opt.txt
-```
-
-### Manual installation of some dependencies
-
-Apex is highly recommended to have fast performance (especially the legacy fusedadam optimizer and FusedRMSNorm)
-
-```shell
-git clone https://github.com/NVIDIA/apex
+pip install -e ." tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：如果在安装过程中遇到</font></font><code>MemoryError</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，请尝试使用</font></font><code>pip</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">with </font></font><code>--no-cache-dir</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（可选）</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一些高级功能（例如工作预训练模型或特定转换）需要额外的软件包，您可以通过以下方式安装它们：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip install -r requirements.opt.txt</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip install -r requirements.opt.txt" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h3 tabindex="-1" dir="auto"><a id="user-content-manual-installation-of-some-dependencies" class="anchor" aria-hidden="true" tabindex="-1" href="#manual-installation-of-some-dependencies"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">手动安装一些依赖项</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">强烈建议 Apex 具有快速性能（尤其是传统的 Fusadadam 优化器和 FusedRMSNorm）</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>git clone https://github.com/NVIDIA/apex
+<span class="pl-c1">cd</span> apex
+pip3 install -v --no-build-isolation --config-settings --build-option=<span class="pl-s"><span class="pl-pds">"</span>--cpp_ext --cuda_ext --deprecated_fused_adam --xentropy --fast_multihead_attn<span class="pl-pds">"</span></span> ./
+<span class="pl-c1">cd</span> ..</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="git clone https://github.com/NVIDIA/apex
 cd apex
-pip3 install -v --no-build-isolation --config-settings --build-option="--cpp_ext --cuda_ext --deprecated_fused_adam --xentropy --fast_multihead_attn" ./
-cd ..
-```
-
-Flash attention:
-
-As of Oct. 2023 flash attention 1 has been upstreamed to pytorch v2 but it is recommended to use flash attention 2 with v2.3.1 for sliding window attention support.
-
-When using regular `position_encoding=True` or Rotary with `max_relative_positions=-1` OpenNMT-py will try to use an optimized dot-product path.
-
-if you want to use [flash attention](https://github.com/Dao-AILab/flash-attention#installation-and-features) then you need to manually install it first:
-
-```bash
-pip install flash-attn --no-build-isolation
-```
-
-if flash attention 2 is not installed, then we will use `F.scaled_dot_product_attention` from pytorch 2.x
-
-When using `max_relative_positions > 0` or Alibi `max_relative_positions=-2` OpenNMT-py will use its legacy code for matrix multiplications.
-
-flash attention and `F.scaled_dot_product_attention` are a bit faster and saves some GPU memory.
-
-
-AWQ:
-
-If you want to run inference or quantize an AWQ model you will need AutoAWQ.
-
-For [AutoAWQ](https://github.com/casper-hansen/AutoAWQ):
-    pip install autoawq
-
-
-## Documentation & FAQs
-
-[Full HTML Documentation](https://opennmt.net/OpenNMT-py/quickstart.html)
-
-[FAQs](https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/FAQ.md)
-
-## Acknowledgements
-
-OpenNMT-py is run as a collaborative open-source project.
-Project was incubated by Systran and Harvard NLP in 2016 in Lua and ported to Pytorch in 2017.
-
-Current maintainers (since 2018):
-
-[François Hernandez](https://github.com/francoishernandez)
-[Vincent Nguyen](https://github.com/vince62s) (Seedfall)
-
-## Citation
-
-If you are using OpenNMT-py for academic work, please cite the initial [system demonstration paper](https://www.aclweb.org/anthology/P17-4012) published in ACL 2017:
-
-```
-@misc{klein2018opennmt,
+pip3 install -v --no-build-isolation --config-settings --build-option=&quot;--cpp_ext --cuda_ext --deprecated_fused_adam --xentropy --fast_multihead_attn&quot; ./
+cd .." tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">闪光注意：</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">截至 2023 年 10 月，Flash Attention 1 已上游到 pytorch v2，但建议使用 Flash Attention 2 和 v2.3.1 来支持滑动窗口 Attention。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当使用常规</font></font><code>position_encoding=True</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或旋转与</font></font><code>max_relative_positions=-1</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py 将尝试使用优化的点积路径。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果你想使用</font></font><a href="https://github.com/Dao-AILab/flash-attention#installation-and-features"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Flash Attention</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">那么你需要先手动安装它：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>pip install flash-attn --no-build-isolation</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="pip install flash-attn --no-build-isolation" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果没有安装 flash 注意 2，那么我们将从</font></font><code>F.scaled_dot_product_attention</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">pytorch 2.x开始使用</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当使用</font></font><code>max_relative_positions &gt; 0</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或 Alibi </font></font><code>max_relative_positions=-2</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py 时，它将使用其遗留代码进行矩阵乘法。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Flash Attention 速度</font></font><code>F.scaled_dot_product_attention</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更快，并且可以节省一些 GPU 内存。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">水质要求：</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您想运行推理或量化 AWQ 模型，您将需要 AutoAWQ。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于</font></font><a href="https://github.com/casper-hansen/AutoAWQ"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">AutoAWQ</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">： pip install autoawq</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-documentation--faqs" class="anchor" aria-hidden="true" tabindex="-1" href="#documentation--faqs"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文档和常见问题解答</font></font></h2>
+<p dir="auto"><a href="https://opennmt.net/OpenNMT-py/quickstart.html" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">完整的 HTML 文档</font></font></a></p>
+<p dir="auto"><a href="https://github.com/OpenNMT/OpenNMT-py/blob/master/docs/source/FAQ.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">常见问题解答</font></font></a></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-acknowledgements" class="anchor" aria-hidden="true" tabindex="-1" href="#acknowledgements"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">致谢</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">OpenNMT-py 作为协作开源项目运行。</font><font style="vertical-align: inherit;">项目于2016年由Systran和Harvard NLP在Lua中孵化，并于2017年移植到Pytorch。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当前维护者（自 2018 年起）：</font></font></p>
+<p dir="auto"><a href="https://github.com/francoishernandez"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">弗朗索瓦·埃尔南德斯</font></font></a>
+<a href="https://github.com/vince62s"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">·文森特·阮</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">(Seedfall)</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-citation" class="anchor" aria-hidden="true" tabindex="-1" href="#citation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">引文</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您使用 OpenNMT-py 进行学术工作，请引用 ACL 2017 上发表的初始</font></font><a href="https://www.aclweb.org/anthology/P17-4012" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">系统演示论文</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：</font></font></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>@misc{klein2018opennmt,
       title={OpenNMT: Neural Machine Translation Toolkit}, 
       author={Guillaume Klein and Yoon Kim and Yuntian Deng and Vincent Nguyen and Jean Senellart and Alexander M. Rush},
       year={2018},
@@ -169,5 +171,21 @@ If you are using OpenNMT-py for academic work, please cite the initial [system d
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }
-```
-
+</code></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="@misc{klein2018opennmt,
+      title={OpenNMT: Neural Machine Translation Toolkit}, 
+      author={Guillaume Klein and Yoon Kim and Yuntian Deng and Vincent Nguyen and Jean Senellart and Alexander M. Rush},
+      year={2018},
+      eprint={1805.11462},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+</article></div>
